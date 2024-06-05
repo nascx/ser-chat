@@ -3,6 +3,7 @@ import Button from "../../components/Button";
 import Input from "../../components/Input";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import axios from 'axios'
 
 const Form = ({ isSignInPage = true }) => {
   const [data, setData] = useState({
@@ -29,11 +30,14 @@ const Form = ({ isSignInPage = true }) => {
     );
 
     if (res.status === 400) {
-      console.log(res);
-      toast.error("Credenciais inválidas");
+      const resData = await res.json();
+      console.log(resData);
+      toast.error(resData.message);
     } else {
       const resData = await res.json();
       if (resData.token) {
+        console.log('message:', resData.message)
+        toast.success(resData.message)
         localStorage.setItem("user:token", resData.token);
         localStorage.setItem("user:detail", JSON.stringify(resData.user));
         navigate("/");
@@ -61,9 +65,9 @@ const Form = ({ isSignInPage = true }) => {
         >
           {!isSignInPage && (
             <Input
-              label="Nome completo"
+              label="Nome"
               name="name"
-              placeholder="Seu nome completo"
+              placeholder="Seu nome"
               className="mb-6 w-[75%]"
               value={data.fullName}
               onChange={(e) => setData({ ...data, fullName: e.target.value })}

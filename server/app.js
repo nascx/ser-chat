@@ -86,7 +86,7 @@ app.post("/api/register", async (req, res, next) => {
     } else {
       const isAlreadyExist = await Users.findOne({ email });
       if (isAlreadyExist) {
-        res.status(400).send("User already exists");
+        res.status(400).json({message: "Já existe usuário com esse e-mail"});
       } else {
         const newUser = new Users({ fullName, email });
         bcryptjs.hash(password, 10, (err, hashedPassword) => {
@@ -94,7 +94,7 @@ app.post("/api/register", async (req, res, next) => {
           newUser.save();
           next();
         });
-        return res.status(200).send("User registered successfully");
+        return res.status(200).json({message: "Usuário registrado com sucesso"});
       }
     }
   } catch (error) {
@@ -111,11 +111,11 @@ app.post("/api/login", async (req, res, next) => {
     } else {
       const user = await Users.findOne({ email });
       if (!user) {
-        res.status(400).send("User email or password is incorrect");
+        res.status(400).json({message: "Senha ou e-mail incorretos!"});
       } else {
         const validateUser = await bcryptjs.compare(password, user.password);
         if (!validateUser) {
-          res.status(400).send("User email or password is incorrect");
+          res.status(400).json({message: "Senha ou e-mail incorretos!"});
         } else {
           const payload = {
             userId: user._id,
