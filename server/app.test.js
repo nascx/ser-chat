@@ -41,6 +41,87 @@ describe('getUsers', () => {
         jest.clearAllMocks();
     });
 
+    test('should return status 200 list of users except the specified user', async () => {
+        const mockUsers = [
+            { _id: 'user1', email: 'user1@example.com', fullName: 'User One' },
+            { _id: 'user2', email: 'user2@example.com', fullName: 'User Two' },
+        ];
+        // Mock the find method of Users model
+        Users.find = jest.fn().mockResolvedValue(mockUsers);
+
+        await getUsers(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith([
+            { user: { email: 'user1@example.com', fullName: 'User One', receiverId: 'user1' } },
+            { user: { email: 'user2@example.com', fullName: 'User Two', receiverId: 'user2' } },
+        ]);
+    });
+
+    test('should handle error and return 400 status code', async () => {
+        // Mock the find method of Users model to throw an error
+        Users.find = jest.fn().mockRejectedValue(new Error('Test error'));
+
+        await getUsers(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ message: "Internal Server Error" });
+    });
+
+    test('should return status 200 and list of users except the specified user', async () => {
+        const mockUsers = [
+            { _id: 'user1', email: 'user1@example.com', fullName: 'User One' },
+            { _id: 'user2', email: 'user2@example.com', fullName: 'User Two' },
+        ];
+        // Mock the find method of Users model
+        Users.find = jest.fn().mockResolvedValue(mockUsers);
+
+        await getUsers(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith([
+            { user: { email: 'user1@example.com', fullName: 'User One', receiverId: 'user1' } },
+            { user: { email: 'user2@example.com', fullName: 'User Two', receiverId: 'user2' } },
+        ]);
+    });
+
+    test('should handle error and return 500 status code', async () => {
+        // Mock the find method of Users model to throw an error
+        Users.find = jest.fn().mockRejectedValue(new Error('Test error'));
+
+        await getUsers(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ message: "Internal Server Error" });
+    });
+
+    test('should return list of users except the specified user', async () => {
+        const mockUsers = [
+            { _id: 'user1', email: 'user1@example.com', fullName: 'User One' },
+            { _id: 'user2', email: 'user2@example.com', fullName: 'User Two' },
+        ];
+        // Mock the find method of Users model
+        Users.find = jest.fn().mockResolvedValue(mockUsers);
+
+        await getUsers(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith([
+            { user: { email: 'user1@example.com', fullName: 'User One', receiverId: 'user1' } },
+            { user: { email: 'user2@example.com', fullName: 'User Two', receiverId: 'user2' } },
+        ]);
+    });
+
+    test('should handle error and return 500 status code', async () => {
+        // Mock the find method of Users model to throw an error
+        Users.find = jest.fn().mockRejectedValue(new Error('Test error'));
+
+        await getUsers(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ message: "Internal Server Error" });
+    });
+
     test('should return list of users except the specified user', async () => {
         const mockUsers = [
             { _id: 'user1', email: 'user1@example.com', fullName: 'User One' },
