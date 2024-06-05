@@ -111,11 +111,11 @@ app.post("/api/login", async (req, res, next) => {
     } else {
       const user = await Users.findOne({ email });
       if (!user) {
-        res.status(400).json({message: "Senha ou e-mail incorretos!"});
+        res.status(400).json({message: "Senha ou e-mail incorretos"});
       } else {
         const validateUser = await bcryptjs.compare(password, user.password);
         if (!validateUser) {
-          res.status(400).json({message: "Senha ou e-mail incorretos!"});
+          res.status(400).json({message: "User email or password is incorrect"});
         } else {
           const payload = {
             userId: user._id,
